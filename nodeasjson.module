@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Contains nodeasjson.module.
+ */
+
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_help().
+ */
+function nodeasjson_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the nodeasjson module.
+    case 'help.page.nodeasjson':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module also provides a URL that responds with a JSON representation of a given node with the content type &quot;page&quot; only if the previously submitted API Key and a node id (nid) of an appropriate node are present, otherwise it will respond with &quot;access denied&quot;.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function nodeasjson_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'system_site_information_settings') {
+    //$site_config = \Drupal::config('nodeasjson.site');
+    $site_config = \Drupal::service('config.factory')->getEditable('nodeasjson.site');
+    $form['siteapikey'] = [
+      '#type' => 'textfield',
+      '#title' => t('Site API Key'),
+      '#description' => t('Site API Key to display page type node as JSON.'),
+      '#default_value' => $site_config->get('siteapikey'),
+    ];
+    $form['actions']['submit']['#value'] = t('Update Configuration');
+    $form['actions']['submit']['#submit'][] = 'site_api_key_save';
+  }
+}
+
+/**
+ * This function Display message when update configuration saved.
+ */
+function site_api_key_save(&$form, FormStateInterface $form_state) {
+  $site_config = \Drupal::getContainer()->get('config.factory')->getEditable('nodeasjson.site');
+  $site_config->set('siteapikey', $form_state->getValue('siteapikey'))->save();
+  drupal_set_message(t('The configuration for site API key have been Updated') . SafeMarkup::checkPlain($form_state->getValue('siteapikey')));
+}

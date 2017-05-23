@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Uninstall and Enable hook for the node_expose_json module.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function nodeasjson_enable() {
+
+  $config_link = 'admin/config/system/site-information';
+
+  drupal_set_message($t("Configure the Site API Key in the following link
+    <a href='@link'> Configuration » System</a>", array('@link' => $config_link)));
+}

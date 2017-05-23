@@ -1,0 +1,7 @@
+# We want to extend the nodeasjson.site configuration
+system.site:
+  mapping:
+    # Our field name is 'siteapikey'
+    siteapikey:
+      type: string
+      label: 'Site API Key'

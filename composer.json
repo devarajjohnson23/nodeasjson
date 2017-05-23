@@ -1,0 +1,14 @@
+{
+  "name": "drupal/nodeasjson",
+  "type": "drupal-module",
+  "description": "This module also provides a URL that responds with a JSON representation of a given node with the content type "page" only if the previously submitted API Key and a node id (nid) of an appropriate node are present, otherwise it will respond with "access denied".",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/nodeasjson",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/nodeasjson",
+    "source": "http://cgit.drupalcode.org/nodeasjson"
+  },
+  "require": { }
+}
