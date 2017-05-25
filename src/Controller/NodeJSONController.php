@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Controller routines for field example routes.
@@ -17,6 +18,7 @@ class NodeJSONController extends ControllerBase {
 
   protected $entityType;
   protected $queryFactory;
+  protected $configFactory;
 
   /**
    * Constructor for the class NodeJSONController to inject dependency.
@@ -26,9 +28,10 @@ class NodeJSONController extends ControllerBase {
    * @param Drupal\Core\Entity\Query\QueryFactory $queryFactory
    *   The action plugin manager.
    */
-  public function __construct(EntityTypeManagerInterface $entityType, QueryFactory $queryFactory) {
+  public function __construct(EntityTypeManagerInterface $entityType, QueryFactory $queryFactory, ConfigFactoryInterface $configFactory) {
     $this->entityType = $entityType;
     $this->queryFactory = $queryFactory;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -37,7 +40,8 @@ class NodeJSONController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity.manager'),
-      $container->get('entity.query')
+      $container->get('entity.query'),
+      $container->get('config.factory')
     );
   }
 
@@ -48,7 +52,7 @@ class NodeJSONController extends ControllerBase {
    *   Return the json response of the input nid for the corresponding type.
    */
   public function nodeAsJsonPage($type, $nid) {
-    $query = $this->query_factory->get('node');
+    $query = $this->queryFactory->get('node');
     $query->condition('status', 1);
     $query->condition('nid', $nid);
     $query->condition('type', $type);
@@ -84,7 +88,7 @@ class NodeJSONController extends ControllerBase {
    * Custom Access callback to check Site API key.
    */
   public function checksiteapikey() {
-    $site_config = \Drupal::service('config.factory')->getEditable('nodeasjson.site');
+    $site_config = $this->configFactory->get('nodeasjson.site');
     $siteapikey = $site_config->get('siteapikey');
     if ($siteapikey != "No API Key yet" && isset($siteapikey)) {
       return TRUE;

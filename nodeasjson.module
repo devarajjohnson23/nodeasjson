@@ -30,7 +30,7 @@ function nodeasjson_help($route_name, RouteMatchInterface $route_match) {
  */
 function nodeasjson_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'system_site_information_settings') {
-    //$site_config = \Drupal::config('nodeasjson.site');
+    // $site_config = \Drupal::config('nodeasjson.site');.
     $site_config = \Drupal::service('config.factory')->getEditable('nodeasjson.site');
     $form['siteapikey'] = [
       '#type' => 'textfield',
@@ -44,10 +44,10 @@ function nodeasjson_form_alter(&$form, FormStateInterface $form_state, $form_id)
 }
 
 /**
- * This function Display message when update configuration saved.
+ * This function Display message when Basic site configuration is saved.
  */
 function site_api_key_save(&$form, FormStateInterface $form_state) {
   $site_config = \Drupal::getContainer()->get('config.factory')->getEditable('nodeasjson.site');
   $site_config->set('siteapikey', $form_state->getValue('siteapikey'))->save();
-  drupal_set_message(t('The configuration for site API key have been Updated') . SafeMarkup::checkPlain($form_state->getValue('siteapikey')));
+  drupal_set_message(t('The configuration for site API key have been Updated -') . ' ' . SafeMarkup::checkPlain($form_state->getValue('siteapikey')));
 }

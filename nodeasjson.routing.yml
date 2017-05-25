@@ -11,5 +11,5 @@ nodeasjson.page:
     type: page
     _title: 'Node Expose JSON'
     _controller: '\Drupal\nodeasjson\Controller\NodeJSONController::nodeAsJsonPage'
-   requirements:
+  requirements:
     _custom_access:  '\Drupal\nodeasjson\Controller\NodeJSONController::access'
